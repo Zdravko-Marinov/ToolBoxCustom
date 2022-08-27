@@ -1,18 +1,31 @@
+from curses import raw
 from os import link
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 import time
+links = []
+flink = []
 
+## make target input
 target = "https://github.com/usernam121"
 chromeSer = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=chromeSer)
 driver.get(target)
 res = driver.find_elements(By.CLASS_NAME,"repo")
 
-links = []
-flink = []
+
+def get_raw(third_page):
+    driver.get(third_page)
+    raw_button = driver.find_element(By.CLASS_NAME,"js-permalink-replaceable-link")
+    raw_button.click()
+
+    htlm = driver.page_source
+    htlm = f"{htlm}"
+
+    if("password" in htlm):
+        print(f"found password {third_page}")
 
 def loop(next_page):
     a = None
@@ -24,10 +37,10 @@ def loop(next_page):
         pass
 
     if "py" in a.text:
-        print("it works")
+        second_page = f"{next_page}/blob/main/{a.text}"
+        get_raw(second_page)
+        print(second_page)
 
-        
-    time.sleep(2)
 
 for i in res:
     links.append(i.text)
