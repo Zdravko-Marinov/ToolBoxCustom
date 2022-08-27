@@ -15,11 +15,16 @@ links = []
 flink = []
 
 def loop(next_page):
+    a = None
+
     driver.get(next_page)
     file_name = driver.find_elements(By.CLASS_NAME,"js-navigation-open")
 
-    for i in file_name:
-        print(i.text)
+    for a in file_name:
+        pass
+
+    if "py" in a.text:
+        print("it works")
 
         
     time.sleep(2)
